@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { crud } from '../services/crud.service';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 
 export default function Update(props) {
 	const [formData, setFormData] = useState({ user: {} });
@@ -12,6 +12,37 @@ export default function Update(props) {
 		const data = await crud.getUserById(userId);
 		setFormData({ user: data });
 	}
+	console.log(formData.user);
+	function changeUserName(e) {
+		e.preventDefault();
+		const user = {
+			...formData.user,
+			username: e.target.value,
+		};
+		setFormData({ user });
+	}
+
+	function changeUserEmail(e) {
+		e.preventDefault();
+		const user = {
+			...formData.user,
+			email: e.target.value,
+		};
+		setFormData({ user });
+	}
+
+	function changeUserPhone(e) {
+		e.preventDefault();
+		const user = {
+			...formData.user,
+			phone: e.target.value,
+		};
+		setFormData({ user });
+	}
+
+	function updateUser(user) {
+		crud.updateUser(user);
+	}
 
 	useEffect(() => {
 		getUserData(userId);
@@ -19,7 +50,7 @@ export default function Update(props) {
 
 	return (
 		<div>
-			<Form className='create-form'>
+			<Form className='create-form' onSubmit={() => updateUser(formData.user)}>
 				<Form.Field>
 					<label className='label'>User Name</label>
 					<input
@@ -27,7 +58,7 @@ export default function Update(props) {
 						className='input input-username'
 						placeholder='User Name'
 						value={formData.user.username}
-						//onChange={e => userHandler(e)}
+						onChange={e => changeUserName(e)}
 					/>
 				</Form.Field>
 				<Form.Field>
@@ -37,7 +68,7 @@ export default function Update(props) {
 						className='input'
 						placeholder='Email'
 						value={formData.user.email}
-						//onChange={e => emailHandler(e)}
+						onChange={e => changeUserEmail(e)}
 					/>
 				</Form.Field>
 				<Form.Field>
@@ -47,12 +78,17 @@ export default function Update(props) {
 						className='input'
 						placeholder='Phone Number'
 						value={formData.user.phone}
-						//onChange={e => phoneHandler(e)}
+						onChange={e => changeUserPhone(e)}
 					/>
 				</Form.Field>
-				<Button className='form-btn' type='submit'>
-					Update
-				</Button>
+				<Link to='/read'>
+					<Button
+						className='form-btn'
+						type='submit'
+						onClick={() => updateUser(formData.user)}>
+						Update
+					</Button>
+				</Link>
 			</Form>
 		</div>
 	);

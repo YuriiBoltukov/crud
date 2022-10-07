@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'semantic-ui-react';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { crud } from '../services/crud.service';
 
 export default function Read() {
