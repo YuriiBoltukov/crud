@@ -1,29 +1,36 @@
-import React from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import { Button, Form } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { crud } from '../services/crud.service';
 
 export default function Create(props) {
-	const { email, setEmail, username, setUserName, phone, setPhone } = props;
-	const postData = e => {
+	const [formData, setFormData] = useState({ user: {} });
+
+	function changeUserName(e) {
 		e.preventDefault();
-		axios.post(`https://fakestoreapi.com/users`, {
-			username,
-			email,
-			phone,
-		});
-	};
-	function userHandler(e) {
-		e.preventDefault();
-		setUserName(e.target.value);
+		const user = {
+			...formData.user,
+			username: e.target.value,
+		};
+		setFormData({ user });
 	}
-	function emailHandler(e) {
+
+	function changeUserEmail(e) {
 		e.preventDefault();
-		setEmail(e.target.value);
+		const user = {
+			...formData.user,
+			email: e.target.value,
+		};
+		setFormData({ user });
 	}
-	function phoneHandler(e) {
+
+	function changeUserPhone(e) {
 		e.preventDefault();
-		setPhone(e.target.value);
+		const user = {
+			...formData.user,
+			phone: e.target.value,
+		};
+		setFormData({ user });
 	}
 	return (
 		<div>
@@ -34,7 +41,7 @@ export default function Create(props) {
 					<input
 						className='input input-username'
 						placeholder='User Name'
-						onChange={e => userHandler(e)}
+						onChange={e => changeUserName(e)}
 					/>
 				</Form.Field>
 				<Form.Field>
@@ -42,7 +49,7 @@ export default function Create(props) {
 					<input
 						className='input'
 						placeholder='email'
-						onChange={e => emailHandler(e)}
+						onChange={e => changeUserEmail(e)}
 					/>
 				</Form.Field>
 				<Form.Field>
@@ -50,12 +57,17 @@ export default function Create(props) {
 					<input
 						className='input'
 						placeholder='Phone number'
-						onChange={e => phoneHandler(e)}
+						onChange={e => changeUserPhone(e)}
 					/>
 				</Form.Field>
 				<Link to={'/read'}>
-					<Button className='form-btn' onClick={e => postData(e)} type='submit'>
-						Submit
+					<Button
+						className='form-btn'
+						type='submit'
+						onClick={() => {
+							crud.createUser(formData.user);
+						}}>
+						Create
 					</Button>
 				</Link>
 			</Form>
